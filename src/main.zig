@@ -1,24 +1,21 @@
 const std = @import("std");
+const Polynomial = @import("polynomial.zig").Polynomial;
 
 pub fn main() !void {
-    // Prints to stderr (it's a shortcut based on `std.io.getStdErr()`)
-    std.debug.print("All your {s} are belong to us.\n", .{"codebase"});
+    var coefficients: [5]f32 = undefined;
+    coefficients[0] = 34.8;
+    coefficients[1] = 37.9;
+    coefficients[2] = 2.0;
+    coefficients[3] = 3.19;
+    coefficients[4] = 7.0;
+    var poly = Polynomial.init(coefficients[0..]);
+    const x: f32 = 89.0;
+    const prod = poly.operate(x);
 
-    // stdout is for the actual output of your application, for example if you
-    // are implementing gzip, then only the compressed bytes should be sent to
-    // stdout, not any debugging messages.
-    const stdout_file = std.io.getStdOut().writer();
-    var bw = std.io.bufferedWriter(stdout_file);
-    const stdout = bw.writer();
-
-    try stdout.print("Run `zig build test` to run the tests.\n", .{});
-
-    try bw.flush(); // don't forget to flush!
+    std.debug.print(
+        "The polynomial of {} with the coefficient of {any} is {d:.10}",
+        .{ x, coefficients, prod },
+    );
 }
 
-test "simple test" {
-    var list = std.ArrayList(i32).init(std.testing.allocator);
-    defer list.deinit(); // try commenting this out and see if zig detects the memory leak!
-    try list.append(42);
-    try std.testing.expectEqual(@as(i32, 42), list.pop());
-}
+test "simple test" {}
